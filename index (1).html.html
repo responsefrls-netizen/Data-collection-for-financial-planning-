@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Financial Planning – Data Collection</title>
+<style>
+:root{--bg:#f4f4fa;--card:#fff;--tx:#1d1d2b;--mu:#6b6b80;--pr:#333399;--ac:#993366;--ln:#d9d9e6;--in:#fff8e6;color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root{--bg:#14141f;--card:#1e1e2d;--tx:#eeeef6;--mu:#a0a0b8;--pr:#8c8cf0;--ac:#e07bb0;--ln:#34344a;--in:#2a2740}}
+*{box-sizing:border-box}html,body{margin:0}
+body{font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);padding:env(safe-area-inset-top) 0 calc(88px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:var(--pr);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+header b{display:block;font-size:17px}header small{opacity:.85}
+.bar{height:5px;background:rgba(255,255,255,.3);border-radius:3px;margin-top:8px}.bar i{display:block;height:100%;width:0;background:#fff;border-radius:3px;transition:width .25s}
+main{max-width:560px;margin:0 auto;padding:16px}
+h2{font-size:20px;margin:4px 0 4px;color:var(--pr)}.sub{color:var(--mu);margin:0 0 14px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:12px}
+label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}.hint{font-weight:400;color:var(--mu);font-size:13px}
+.f{margin-bottom:14px}.f:last-child{margin-bottom:0}
+input,select{width:100%;min-height:48px;font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--ln);border-radius:10px;padding:10px 12px}
+input:focus,select:focus{outline:2px solid var(--pr);border-color:transparent}
+.fmt{font-size:13px;color:var(--ac);min-height:18px;margin-top:3px}
+.q{font-weight:600;margin:0 0 10px}.opt{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid var(--ln);border-radius:10px;margin-bottom:8px;font-weight:400;font-size:15px;cursor:pointer}
+.opt input{width:20px;min-height:20px;margin:2px 0 0;flex:none;accent-color:var(--pr)}.opt:has(input:checked){border-color:var(--pr);background:var(--in)}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--ln)}.row:last-child{border:0}.row b{white-space:nowrap}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--ln);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;justify-content:center}
+nav button,.btn{flex:1;max-width:270px;min-height:50px;border-radius:12px;border:0;font-weight:600;font-size:16px;font-family:inherit;cursor:pointer}
+.p{background:var(--pr);color:#fff}.s{background:transparent;color:var(--pr);border:1px solid var(--pr)}
+.btn{display:block;width:100%;max-width:none;margin-bottom:10px;text-align:center;text-decoration:none;line-height:50px;min-height:50px}
+.note{font-size:13px;color:var(--mu);text-align:center;margin-top:12px}
+</style></head><body>
+<header><b>Financial Planning – Data Collection</b><small id="st"></small><div class="bar"><i id="pb"></i></div></header>
+<main id="m"></main>
+<nav><button class="s" id="bk">Back</button><button class="p" id="nx">Next</button></nav>
+<script>
+// ---- Set these before publishing ----
+const RM_WHATSAPP = "";            // e.g. "919876543210" (country code + number, no + or spaces). Empty = client picks the contact.
+const RM_EMAIL    = "";            // e.g. "rm.name@bank.com"
+const RM_NAME     = "your Relationship Manager";
+// -------------------------------------
+const RISK = [["Which of the following best describes your current stage of life?", ["Retired", "Nearing Retirement", "Matured Family", "Young Family", "Single"]], ["How would you react to a significant fall in your investment value in a year (for example, a 20% loss), assuming the fundamentals of the investment have not changed?", ["I will withdraw all money from the investment and transfer it bank FD", "I will withdraw and transfer some of the investment into secured investment portfolio", "I will wait till the losses are covered and then will move to the secured investment", "I will keep my investments as it is originally aimed at", "I will invest further considering the downturn as an opportunity"]], ["Are greater returns over the long term important to you and are you willing to experience the volatility of the market?", ["I am not comfortable with experiencing the potential volatility of the market in the expectation of higher returns", "I am a little uncomfortable with experiencing volatility in the market", "I am rather comfortable with the volatility assuming it is temporary", "I am comfortable with reasonable market volatility in the expectation of higher returns", "I am very comfortable with market volatility. I understand there is usually a volatility of the markets in the short term which usually result in a higher return over the long term"]], ["How would you describe your overall investment decisions?", ["I have never really invested before, other than my EPF and FDs", "I have never lost on investments as I usually invest in safe and secured investment", "The returns have been average. I would like to start making higher returns", "I have experienced some losses with my investments but I am willing to keep trying", "I have made better than average returns on investments and have experienced some volatility"]], ["Please describe your attitude towards risk and return.", ["I am a very low risk taker, I need the Safety & security", "I am a low risk taker", "I am an average risk taker, not overly concerned with security", "I am a high risk taker, short term security is not an issue for me", "I am a very high risk taker, security is not a concern to me"]], ["How would you describe your understanding of the financial and investment market?", ["I don't really understand the financial and investment market and would not invest into it", "I don't understand investing and I would rather rely on someone else to advise me on investing", "I believe I have a reasonable understanding of investing and I understand the importance of diversifying my investments", "I have a good understanding of investing so I understand that different market sectors offer varying income, growth and taxation options", "I am an experienced investor. I understand all the investment sectors and the various factors which can influence investment performance"]], ["How much could the total value of all your investments fall before you would begin to feel uncomfortable?", ["Any fall would make me feel uncomfortable", "Up to 5%", "Up to 10%", "Up to 15%", "25% and above"]], ["Which of the following best describes your investment purpose?", ["To protect the capital", "To protect capital and earn regular income", "To grow capital", "To grow capital and generate regular income", "To build long-term wealth"]], ["Which of the following portfolios would you prefer? (The band shows the probable return over the next one year.)", ["Loss 0% Profit 8%", "Loss -2% profit 10%", "Loss -7% profit 15%", "Loss-12% profit 20%", "Loss -17% profit 25%"]], ["If your investments perform poorly in a global downturn, how long could you stay invested before getting worried or selling?", ["Less than 3 months", "Up to 6 months", "Up to 12 months", "Up to 2 years", "Up to 3 years or more"]]];
+const G = (n) => [[`g${n}`,`Goal ${n} (e.g. child's education, home, retirement)`,'text'],[`g${n}y`,'Years from now','n'],[`g${n}a`,"Amount needed in today's value (₹)",'inr']];
+const S = [
+ {t:'About you',d:'Takes about a minute.',f:[['name','Full name','text'],['mobile','Mobile number','tel'],['email','Email','email'],['city','City','text'],['dob','Date of birth','date'],['res','Residential status','sel',['Resident Indian','NRI','PIO / OCI']],['mar','Marital status','sel',['Single','Married','Other']],['dep','Number of dependents','n']]},
+ {t:'Income',d:'Approximate figures are fine. Amounts per month.',f:[['inc1','Your income (salary / business)','inr'],['inc2','Spouse income','inr'],['inc3','Other income','inr','Rent, interest, dividends']]},
+ {t:'Expenses',d:'A rough total is enough.',f:[['exm','Monthly living expenses','inr','Rent, groceries, utilities, fuel, dining, shopping'],['emi','Loan EMIs per month','inr','All loans together'],['exy','Additional yearly expenses','inr','Vacations, school fees, festivals, gifts – total for the year']]},
+ {t:'Insurance',d:'All policies combined (self + family).',f:[['lip','Life insurance – total premium per year (₹)','inr'],['lic','Life insurance – total cover (₹)','inr'],['hip','Health insurance – total premium per year (₹)','inr'],['hic','Health insurance – total cover (₹)','inr']]},
+ {t:'Investments',d:'Current value of what you hold today.',f:[['mf','Mutual funds – current value','inr'],['sip','Mutual funds – monthly SIP','inr'],['stk','Stocks (direct)','inr'],['fd','FDs, bonds, debt instruments','inr'],['ret','PPF / EPF / NPS','inr'],['gold','Gold & silver','inr'],['re','Real estate (investment property)','inr'],['cash','Bank savings / liquid cash','inr'],['oth','Other investments','inr'],['home','Own home & vehicle value','inr'],['loan','Total outstanding loans','inr']]},
+ {t:'Your goals',d:'Your top goals. Add up to three.',f:[...G(1),...G(2),...G(3),['rage','Planned retirement age','n']]},
+ {t:'Risk profile',d:'Pick the answer that best describes you. There are no right or wrong answers.',risk:1},
+ {t:'Review & send',d:'Check the summary, then send it to '+RM_NAME+'.',end:1}
+];
+const KEY='dcf1'; let D={}, i=0;
+try{D=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}};
+const $=(s)=>document.querySelector(s), inr=(v)=>'₹ '+Number(v||0).toLocaleString('en-IN');
+const num=(k)=>parseFloat(String(D[k]||'').replace(/,/g,''))||0;
+const esc=(s)=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function totals(){const inc=num('inc1')+num('inc2')+num('inc3'),ex=num('exm')+num('emi')+num('exy')/12,inv=['mf','stk','fd','ret','gold','re','cash','oth'].reduce((a,k)=>a+num(k),0);
+ const sc=RISK.map((_,n)=>D['r'+n]).filter(v=>v!==undefined).map(Number);const rs=sc.length?Math.round(sc.reduce((a,b)=>a+b+1,0)/sc.length*10):null;
+ return{inc,ex,sur:inc-ex,inv,nw:inv+num('home')-num('loan'),rs,prof:rs==null?'':rs<=24?'Conservative':rs<=36?'Moderate':'Aggressive'}}
+function summary(){const t=totals(),L=[`Financial planning data – ${D.name||''}`,''];
+ S.forEach(s=>{if(s.f){L.push('['+s.t+']');s.f.forEach(f=>{if(D[f[0]])L.push(f[1]+': '+D[f[0]])})}});
+ L.push('[Risk profile]');RISK.forEach((q,n)=>{if(D['r'+n]!==undefined)L.push((n+1)+'. '+'abcde'[D['r'+n]]+') '+q[1][D['r'+n]])});
+ L.push('',`Monthly income ${inr(t.inc)} | expenses ${inr(Math.round(t.ex))} | investments ${inr(t.inv)} | risk score ${t.rs??'-'} ${t.prof}`);return L.join('\n')}
+function csv(){const r=[['Section','Field','Value']];S.forEach(s=>s.f&&s.f.forEach(f=>r.push([s.t,f[1],D[f[0]]||''])));
+ RISK.forEach((q,n)=>r.push(['Risk',q[0],D['r'+n]!==undefined?'abcde'[D['r'+n]]+') '+q[1][D['r'+n]]:'']));
+ return r.map(x=>x.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')}
+function field([k,l,ty,x]){const v=esc(D[k]||''),hint=(x&&ty!='sel')?` <span class="hint">– ${x}</span>`:'';let c;
+ if(ty=='sel')c=`<select data-k="${k}"><option value="">Select</option>${x.map(o=>`<option${D[k]==o?' selected':''}>${o}</option>`).join('')}</select>`;
+ else{const m=ty=='inr'?'inputmode="numeric" placeholder="0"':ty=='n'?'inputmode="numeric"':ty=='tel'?'inputmode="tel" autocomplete="tel"':ty=='email'?'inputmode="email" autocomplete="email"':'';
+  c=`<input data-k="${k}" data-t="${ty}" type="${ty=='date'?'date':'text'}" ${m} value="${v}">`}
+ return `<div class="f"><label>${l}${hint}</label>${c}${ty=='inr'?`<div class="fmt" id="f_${k}">${D[k]?inr(num(k)):''}</div>`:''}</div>`}
+function riskQ(q,n){return `<div class="card"><p class="q">${n+1}. ${esc(q[0])}</p>`+q[1].map((o,j)=>`<label class="opt"><input type="radio" name="r${n}" value="${j}"${D['r'+n]==j?' checked':''}><span>${esc(o)}</span></label>`).join('')+'</div>'}
+function render(){const s=S[i];$('#st').textContent=`Step ${i+1} of ${S.length} · ${s.t}`;$('#pb').style.width=((i+1)/S.length*100)+'%';
+ $('#bk').style.visibility=i?'visible':'hidden';$('#nx').textContent=s.end?'Start over':i==S.length-2?'Review':'Next';
+ let h=`<h2>${s.t}</h2><p class="sub">${s.d}</p>`;
+ if(s.f)h+='<div class="card">'+s.f.map(field).join('')+'</div>';
+ if(s.risk)h+=RISK.map(riskQ).join('');
+ if(s.end){const t=totals();
+  h+=`<div class="card"><div class="row"><span>Monthly income</span><b>${inr(t.inc)}</b></div><div class="row"><span>Monthly expenses (incl. yearly ÷ 12)</span><b>${inr(Math.round(t.ex))}</b></div><div class="row"><span>Monthly surplus</span><b>${inr(Math.round(t.sur))}</b></div><div class="row"><span>Total investments</span><b>${inr(t.inv)}</b></div></div>
+  <a class="btn p" id="wa" target="_blank" rel="noopener">Send on WhatsApp</a>
+  ${RM_EMAIL?'<a class="btn s" id="em">Send by email</a>':''}
+  <button class="btn s" id="dl">Download as CSV</button>
+  <p class="note">Your details stay on this device until you choose to send them. Please don't share your PAN or passwords here.</p>`}
+ $('#m').innerHTML=h;scrollTo(0,0);
+ if(s.end){const tx=encodeURIComponent(summary());$('#wa').href=`https://wa.me/${RM_WHATSAPP}?text=${tx}`;
+  if(RM_EMAIL)$('#em').href=`mailto:${RM_EMAIL}?subject=${encodeURIComponent('Financial planning data – '+(D.name||''))}&body=${tx}`;
+  $('#dl').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv()],{type:'text/csv'}));a.download='financial-planning-data.csv';a.click()}}}
+$('#m').addEventListener('input',e=>{const t=e.target,k=t.dataset.k;
+ if(k){let v=t.value;if(t.dataset.t=='inr'||t.dataset.t=='n'){v=v.replace(/[^\d.]/g,'');if(t.dataset.t=='inr'&&v){const[a,b]=v.split('.');v=Number(a||0).toLocaleString('en-IN')+(b!==undefined?'.'+b.slice(0,2):'')}t.value=v}
+  D[k]=v;if(t.dataset.t=='inr'){const f=$('#f_'+k);if(f)f.textContent=v?inr(num(k)):''}save()}
+ else if(t.type=='radio'){D[t.name]=t.value;save()}});
+$('#m').addEventListener('change',e=>{if(e.target.tagName=='SELECT'){D[e.target.dataset.k]=e.target.value;save()}});
+$('#nx').onclick=()=>{if(S[i].end){if(confirm('Clear all entries and start over?')){D={};save();i=0;render()}}else{i++;render()}};
+$('#bk').onclick=()=>{if(i){i--;render()}};
+render();
+</script></body></html>
